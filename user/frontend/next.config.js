@@ -8,6 +8,7 @@ const nextConfig = {
       "mdbcdn.b-cdn.net",
       "cdn-icons-png.flaticon.com",
       "placeimg.com",
+      "i.ytimg.com",
     ]
   }
 };

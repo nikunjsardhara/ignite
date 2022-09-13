@@ -135,7 +135,7 @@ function Modal() {
                   Login
                 </button>
               </form>
-              <div className="divider"></div>
+              <div className="divider text-gray-500 font-normal text-sm">You don't have an account ?</div>
               <div
                 onClick={() => setToggle(!toggle)}
                 className="cursor-pointer w-[70%] rounded-full text-center text-lg text-black border-none "
@@ -216,7 +216,7 @@ function Modal() {
                   Signup
                 </button>
               </form>
-              <div className="divider"></div>
+              <div className="divider text-gray-500 font-normal text-sm">If you already have an account ?</div>
               <div
                 onClick={() => setToggle(!toggle)}
                 className="cursor-pointer w-[70%] rounded-full text-center text-lg text-black border-none "

@@ -25,10 +25,10 @@ app.get("/", (req, res) => {
 
 // Custom Routes for the app:
 //routes:
-const auth = require("./routes/auth");
+app.use("/auth", require("./routes/auth"));
+app.use('/courses', require('./routes/courses'));
 
-//set-routes:
-app.use("/auth", auth);
+
 
 //Not-Found Any Kind of path middleware
 app.use("*", (req, res, next) => {

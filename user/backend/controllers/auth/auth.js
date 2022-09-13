@@ -1,13 +1,13 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 // models
-const Users = require("../models/users");
+const Users = require("../../models/users");
 
 // Validation methods
 const {
   loginValidation,
   signUpValidation
-} = require("../utils/validators/validation");
+} = require("../../utils/validators/validation");
 
 const validation = {
   login: loginValidation,

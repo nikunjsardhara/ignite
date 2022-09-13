@@ -92,9 +92,10 @@ function Content() {
         </div>
         <div className="mx-10">
           <div className="mt-10 flex flex-row flex-wrap space-x-5 justify-evenly">
-            {[0, 1, 2].map((item, key) => {
+            {/* Cards codes are stopped here because props {course} array is not available yet. */}
+            {/* {[0, 1, 2].map((item, key) => {
               return <Card key={key} />;
-            })}
+            })} */}
           </div>
         </div>
         <div className="w-full flex flex-row-reverse mt-5 mb-10">

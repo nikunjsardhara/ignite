@@ -27,7 +27,7 @@ const UsersSchema = new mongoose.Schema(
       min: [10, "Please provide at least 10 character."]
     }
   },
-  { timestamp: true }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("Users", UsersSchema);

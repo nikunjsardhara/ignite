@@ -1,7 +1,18 @@
 import React from "react";
 import Card from "../components/Card";
+import useSWR from "swr";
 
-function cources() {
+// fetcher
+const fetcher = (url) => fetch(url).then((res) => res.json());
+
+function courses() {
+  const { data, error } = useSWR(
+    process.env.NEXT_PUBLIC_BACKEND_URL + "/courses",
+    fetcher
+  );
+  if (error) return <div>failed to load</div>;
+  if (!data) return <div>loading...</div>;
+
   return (
     <div className="my-20 mt-10">
       <div className="container mx-auto">
@@ -15,8 +26,8 @@ function cources() {
       </div>
       <div className="mx-10">
         <div className="mt-10 flex flex-row flex-wrap justify-evenly">
-          {[0, 1, 2, 3, 4, 5, 6].map((item, key) => {
-            return <Card key={key} />;
+          {data?.courses.map((item, key) => {
+            return <Card course={item} key={key} />;
           })}
         </div>
       </div>
@@ -24,4 +35,4 @@ function cources() {
   );
 }
 
-export default cources;
+export default courses;
