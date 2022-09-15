@@ -1,0 +1,45 @@
+const DOOR_SUBMISSION_CREATE = 'submission_c'
+const DOOR_SUBMISSION_READ = 'submission_r'
+const DOOR_SUBMISSION_UPDATE = 'submission_u'
+const DOOR_SUBMISSION_DELETE = 'submission_d'
+
+const USERS_CREATE = 'users_c'
+const USERS_READ = 'users_r'
+const USERS_UPDATE = 'users_u'
+const USERS_DELETE = 'users_d'
+
+const ROLES_CREATE = 'roles_c'
+const ROLES_READ = 'roles_r'
+const ROLES_UPDATE = 'roles_u'
+const ROLES_DELETE = 'roles_d'
+
+const permissions = [
+  DOOR_SUBMISSION_CREATE,
+  DOOR_SUBMISSION_READ,
+  DOOR_SUBMISSION_UPDATE,
+  DOOR_SUBMISSION_DELETE,
+  // USERS_CREATE,
+  // USERS_READ,
+  // USERS_UPDATE,
+  // USERS_DELETE,
+  // ROLES_CREATE,
+  // ROLES_READ,
+  // ROLES_UPDATE,
+  // ROLES_DELETE,
+]
+
+module.exports = {
+  DOOR_SUBMISSION_CREATE,
+  DOOR_SUBMISSION_READ,
+  DOOR_SUBMISSION_UPDATE,
+  DOOR_SUBMISSION_DELETE,
+  USERS_CREATE,
+  USERS_READ,
+  USERS_UPDATE,
+  USERS_DELETE,
+  ROLES_CREATE,
+  ROLES_READ,
+  ROLES_UPDATE,
+  ROLES_DELETE,
+  permissions
+}
