@@ -77,7 +77,7 @@ function RolesTable({ data, page, setPage }) {
     }
     dispatch(fetchRoles(data))
   }
-
+  console.log(tableData);
   return (
     <>
       {data && (

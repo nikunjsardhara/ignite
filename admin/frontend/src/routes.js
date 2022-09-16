@@ -17,7 +17,8 @@ import { isPathPermitted } from "./helpers/checkPermissions";
 import { useDispatch } from "react-redux";
 import { setToken } from "./features/auth/authSlice";
 import DesignedDoorList from "./components/doorDataList/DesignedDoorList";
-import Course from "./components/courses/course";
+import FormCourses from "./components/courses/FormCourses";
+import TableCourses from "./components/courses/TableCourses";
 
 export const PrivateAdminRoute = ({ component: Component, path, ...rest }) => (
   <Route
@@ -51,7 +52,12 @@ const BaseRoute = () => {
       <Route exact path="/admin/login" component={LoginForm} />
 
       <PrivateAdminRoute exact path="/admin/dashboard" component={Dashboard} />
-      <PrivateAdminRoute exact path="/admin/courses" component={Course} />
+      <PrivateAdminRoute exact path="/admin/courses" component={TableCourses} />
+      <PrivateAdminRoute
+        exact
+        path="/admin/addcourse"
+        component={FormCourses}
+      />
       <PrivateAdminRoute exact path="/admin/users" component={UserListPage} />
       <PrivateAdminRoute
         exact

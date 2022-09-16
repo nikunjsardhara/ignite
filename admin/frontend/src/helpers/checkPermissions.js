@@ -33,7 +33,8 @@ const superAdminPaths = [
   "/admin/role/:id",
   "/admin/door-submissions",
   "/admin/designed-door",
-  "/admin/courses"
+  "/admin/courses",
+  "/admin/addcourse"
 ];
 
 export const isPathPermitted = (path = "") => {

@@ -4,9 +4,15 @@ const {
   verifiedFunction: ensureAuth
 } = require("../middlewares/verifyJwtToken");
 
-const { addCourses ,updateCourses,deleteCourses} = require("../controllers/coursesControllers");
+const {
+  addCourses,
+  updateCourses,
+  deleteCourses,
+  getCourses
+} = require("../controllers/coursesControllers");
 
 //Add New Courses
+router.get("/getcourses", getCourses);
 router.post("/add", ensureAuth, addCourses);
 router.post("/update", ensureAuth, updateCourses);
 router.post("/delete", ensureAuth, deleteCourses);

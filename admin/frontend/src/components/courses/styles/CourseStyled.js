@@ -10,6 +10,9 @@ const CourseStyled = styled.div`
     align-items: center;
     padding-top: 1rem;
   }
+  .form-course {
+    margin-bottom: 1rem;
+  }
 `;
 
 export default CourseStyled;

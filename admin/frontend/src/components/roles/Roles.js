@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { isActionPermitted } from '../../helpers/checkPermissions'
-import { ROLES_CREATE } from '../../helpers/permissions'
 import CustomLoader from '../common/CustomLoader'
 import DashboardHOC from '../common/DashboardHOC'
 import RolesTable from './RolesTable'

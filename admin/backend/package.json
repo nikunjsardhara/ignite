@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server",
+    "start": "nodemon server",
     "server": "nodemon server",
     "dev": "concurrently -n 'backend,frontend' -c 'red,green' \"nodemon server.js\" \"npm run frontend\"",
     "frontend": "cd .. && cd frontend && npm run start"
@@ -28,6 +28,7 @@
     "crypto-js": "^4.0.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "mocha": "^8.1.1",
     "mongoose": "^5.9.27",
