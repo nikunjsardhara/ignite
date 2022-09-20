@@ -21,7 +21,7 @@ exports.addCourses = async (req, res) => {
   try {
     const { title, description, price } = req.body;
 
-    const { error } = await handleValidation(req.body, "addCourses");
+    const error = await handleValidation(req.body, "addCourses");
     if (error) {
       return res.status(400).json({
         success: false,
@@ -54,7 +54,15 @@ exports.addCourses = async (req, res) => {
 
 exports.updateCourses = async (req, res) => {
   try {
-    console.log("Updating");
+    const id = req.body.id;
+    delete req.body.id;
+    const resp = await Courses.findOneAndUpdate({ _id: id }, req.body);
+    if (!resp) {
+      return res
+        .status(404)
+        .json({ success: false, message: "No courses found" });
+    }
+    return res.status(200).json({ success: true, message: "Course updated" });
   } catch (e) {
     console.log(e);
     return res.status(500).json({ success: false, message: e.message });
@@ -63,7 +71,18 @@ exports.updateCourses = async (req, res) => {
 
 exports.deleteCourses = async (req, res) => {
   try {
-    console.log("Deleting");
+    const course = await Courses.findOne({ _id: req.body.id });
+
+    if (!course)
+      return res.status(404).json({
+        success: true,
+        message: "No course found"
+      });
+
+    await course.deleteOne();
+    console.log(course);
+
+    return res.status(200).json({ success: true, message: "Course deleted" });
   } catch (e) {
     console.log(e);
     return res.status(500).json({ success: false, message: e.message });
@@ -73,6 +92,22 @@ exports.deleteCourses = async (req, res) => {
 exports.getCourses = async (req, res) => {
   try {
     const courses = await Courses.find();
+    if (!courses) {
+      return res
+        .status(404)
+        .json({ success: false, message: "No courses found" });
+    }
+    return res.status(200).json({ success: true, courses });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ success: false, message: e.message });
+  }
+};
+
+exports.getCoursesById = async (req, res) => {
+  try {
+    const { id } = req.body;
+    const courses = await Courses.find({ _id: id });
     if (!courses) {
       return res
         .status(404)

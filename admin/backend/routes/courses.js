@@ -8,7 +8,8 @@ const {
   addCourses,
   updateCourses,
   deleteCourses,
-  getCourses
+  getCourses,
+  getCoursesById
 } = require("../controllers/coursesControllers");
 
 //Add New Courses
@@ -16,4 +17,5 @@ router.get("/getcourses", getCourses);
 router.post("/add", ensureAuth, addCourses);
 router.post("/update", ensureAuth, updateCourses);
 router.post("/delete", ensureAuth, deleteCourses);
+router.post("/getcourse", ensureAuth, getCoursesById);
 module.exports = router;

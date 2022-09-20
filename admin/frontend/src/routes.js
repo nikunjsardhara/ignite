@@ -19,6 +19,7 @@ import { setToken } from "./features/auth/authSlice";
 import DesignedDoorList from "./components/doorDataList/DesignedDoorList";
 import FormCourses from "./components/courses/FormCourses";
 import TableCourses from "./components/courses/TableCourses";
+import EditCourse from "./components/courses/EditCourse";
 
 export const PrivateAdminRoute = ({ component: Component, path, ...rest }) => (
   <Route
@@ -57,6 +58,11 @@ const BaseRoute = () => {
         exact
         path="/admin/addcourse"
         component={FormCourses}
+      />
+      <PrivateAdminRoute
+        exact
+        path="/admin/courses/edit/:id"
+        component={EditCourse}
       />
       <PrivateAdminRoute exact path="/admin/users" component={UserListPage} />
       <PrivateAdminRoute

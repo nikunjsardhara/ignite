@@ -1,18 +1,17 @@
-import { Button, notification } from "antd";
-import React from "react";
-import { Form, Input, InputNumber, Checkbox, SubmitButton } from "formik-antd";
+import React, { useEffect, useState } from "react";
 import mernDashApi from "../../helpers/apiUtils";
 import DashboardHOC from "../common/DashboardHOC";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Schema } from "./schema/courseForm";
+import { Form, Input, InputNumber, Checkbox, SubmitButton } from "formik-antd";
 import { Formik, ErrorMessage } from "formik";
+import TextArea from "antd/lib/input/TextArea";
+import { Button, notification } from "antd";
 
-const { TextArea } = Input;
+const INF = 2398490;
 
-function FormCourses() {
-  let history = useHistory();
-  const [loadings, setLoadings] = React.useState(false);
-  const [form, setFrom] = React.useState({
+function EditCourse(props) {
+  const [form, setFrom] = useState({
     title: "",
     description: "",
     price: 100
@@ -21,32 +20,48 @@ function FormCourses() {
   // Notifications
   const openNotification = () => {
     notification.open({
-      message: "Course Added Successfully",
+      message: "Course Updated Successfully",
       description: ""
     });
   };
 
-  const handleSubmit = async () => {
-    const res = await mernDashApi.post("/api/courses/add", form);
+  useEffect(() => {
+    (async () => {
+      const res = await mernDashApi.post("/api/courses/getcourse", {
+        id: props.match.params.id
+      });
+      if (res?.data?.success) {
+        setFrom({
+          title: res.data.courses[0]?.title,
+          description: res.data.courses[0]?.description,
+          price: res.data.courses[0]?.price
+        });
+      }
+    })();
+  }, []);
+
+  const handleSubmit = async (values) => {
+    const res = await mernDashApi.post("/api/courses/update", {
+      ...values,
+      id: props.match.params.id
+    });
     if (res.data.success) {
-      setFrom({ title: "", description: "", price: 100 });
       openNotification();
+      props.history.push("/admin/courses");
     }
-    history.push("/admin/courses");
-    setLoadings(false);
   };
 
   return (
     <>
       <Formik
+        enableReinitialize={true}
         initialValues={{
-          title: "",
-          description: ""
+          title: form.title,
+          description: form.description
         }}
         validationSchema={Schema}
-        onSubmit={(values) => {
-          setLoadings(true);
-          handleSubmit(values);
+        onSubmit={async (values) => {
+          await handleSubmit(values);
         }}
       >
         {({ errors, touched }) => {
@@ -89,7 +104,7 @@ function FormCourses() {
 
               <div className="flex space-x-4 mt-3 items-center">
                 <div className="">
-                  <SubmitButton loading={loadings}>Save</SubmitButton>
+                  <SubmitButton>Save</SubmitButton>
                 </div>
                 <Button type="info" className="login-form-button">
                   <Link to="/admin/courses">Back</Link>
@@ -103,4 +118,4 @@ function FormCourses() {
   );
 }
 
-export default DashboardHOC(FormCourses);
+export default DashboardHOC(EditCourse, INF);
