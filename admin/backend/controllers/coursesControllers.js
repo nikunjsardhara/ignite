@@ -19,7 +19,7 @@ const handleValidation = (body, type) => {
 
 exports.addCourses = async (req, res) => {
   try {
-    const { title, description, price } = req.body;
+    const { title } = req.body;
 
     const error = await handleValidation(req.body, "addCourses");
     if (error) {
@@ -37,11 +37,7 @@ exports.addCourses = async (req, res) => {
         .json({ success: false, message: "Course already exists" });
     }
 
-    const newCourse = new Courses({
-      title,
-      description,
-      price
-    });
+    const newCourse = new Courses(req.body);
     const course = await newCourse.save();
     return res
       .status(200)

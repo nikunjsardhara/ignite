@@ -7,7 +7,7 @@ import { Form, Input, InputNumber, Checkbox, SubmitButton } from "formik-antd";
 import { Formik, ErrorMessage } from "formik";
 import TextArea from "antd/lib/input/TextArea";
 import { Button, notification } from "antd";
-
+import { BsCheckLg } from "react-icons/bs";
 const INF = 2398490;
 
 function EditCourse(props) {
@@ -21,7 +21,8 @@ function EditCourse(props) {
   const openNotification = () => {
     notification.open({
       message: "Course Updated Successfully",
-      description: ""
+      description: "", 
+      icon: <BsCheckLg style={{ color: "#38b000" }} />,
     });
   };
 

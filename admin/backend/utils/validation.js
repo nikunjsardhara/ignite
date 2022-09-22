@@ -110,7 +110,8 @@ const addCourseValidation = (data) => {
   const schema = Joi.object({
     title: Joi.string().required(),
     description: Joi.string(),
-    price: Joi.number().required()
+    price: Joi.number().required(),
+    playlist: Joi.array()
   });
   return schema.validate(data);
 };

@@ -7,6 +7,8 @@ import DashboardHOC from "../common/DashboardHOC";
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { useHistory } from "react-router-dom";
 import mernDashApi from "../../helpers/apiUtils";
+import { BsCheckLg } from "react-icons/bs";
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 function TableCourses() {
   let history = useHistory();
@@ -18,7 +20,8 @@ function TableCourses() {
   const openNotification = () => {
     notification.open({
       message: "Course Deleted Successfully",
-      description: ""
+      description: "",
+      icon: <BsCheckLg style={{ color: "#38b000" }} />
     });
   };
   const record_id = (id) => {
@@ -101,6 +104,7 @@ function TableCourses() {
   useEffect(() => {
     dispatch(fetchCourses());
   }, [fakeState]);
+
   return (
     <div>
       <div className="w-full flex justify-end my-3">
@@ -108,14 +112,14 @@ function TableCourses() {
           <div className="btn btn-success">Add Course</div>
         </Link>
       </div>
-      <Table
-        className="clearfix"
-        columns={columns}
-        dataSource={courses}
-        style={{ clear: "both" }}
-        // rowKey={data}
-        pagination={false}
-      />
+        <Table
+          className="clearfix"
+          columns={columns}
+          dataSource={courses}
+          style={{ clear: "both" }}
+          // rowKey={data}
+          pagination={false}
+        />
     </div>
   );
 }

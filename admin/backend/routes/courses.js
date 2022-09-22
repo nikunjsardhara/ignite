@@ -12,7 +12,7 @@ const {
   getCoursesById
 } = require("../controllers/coursesControllers");
 
-//Add New Courses
+//Add New Coursesm
 router.get("/getcourses", getCourses);
 router.post("/add", ensureAuth, addCourses);
 router.post("/update", ensureAuth, updateCourses);
