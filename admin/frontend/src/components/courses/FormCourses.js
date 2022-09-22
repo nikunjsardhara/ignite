@@ -1,19 +1,21 @@
 import { Button, notification } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import { Form, Input, InputNumber, Checkbox, SubmitButton } from "formik-antd";
 import mernDashApi from "../../helpers/apiUtils";
 import DashboardHOC from "../common/DashboardHOC";
 import { Link, useHistory } from "react-router-dom";
 import { Schema } from "./schema/courseForm";
-import { Formik, ErrorMessage, FieldArray, Field } from "formik";
+import { Formik, ErrorMessage, FieldArray, Field, getIn } from "formik";
 import { BsCheckLg } from "react-icons/bs";
+import Cleave from "cleave.js/react";
 
 const { TextArea } = Input;
 
 function FormCourses() {
   let history = useHistory();
-  const [loadings, setLoadings] = React.useState(false);
-  const [form, setFrom] = React.useState({
+  const [loadings, setLoadings] = useState(false);
+  const [creditCardNo, setCreditCardNo] = useState("");
+  const [form, setFrom] = useState({
     title: "",
     description: "",
     price: ""
@@ -27,6 +29,9 @@ function FormCourses() {
       icon: <BsCheckLg style={{ color: "#38b000" }} />
     });
   };
+  function onTimeChange(e) {
+    setCreditCardNo(e.target.rawValue);
+  }
 
   const handleSubmit = async (values) => {
     const res = await mernDashApi.post("/api/courses/add", values);
@@ -63,6 +68,7 @@ function FormCourses() {
         }}
       >
         {({ errors, touched, values }) => {
+          console.log(errors, touched, values);
           return (
             <Form>
               <h1 className="text-[2rem] font-semibold my-2">
@@ -127,38 +133,41 @@ function FormCourses() {
                     <div>
                       {values.Playlist.length > 0 &&
                         values.Playlist.map((playlist, index) => (
-                          <div key={index} className="mt-4 bg-white px-3 py-3 rounded-md">
+                          <div
+                            key={index}
+                            className="mt-4 bg-white px-3 py-3 rounded-md"
+                          >
                             <div className="space-y-2 transition-all flex flex-row justify-between items-center space-x-3">
                               <div className="flex flex-col w-full mt-2">
-                                <label>Title</label>
-                                <Field
-                                  name={`playlist.${index}._title`}
+                                <FIELD
                                   placeholder="Title of the course"
-                                  component={MyInput}
+                                  name="_title"
+                                  label="Title"
+                                  index={index}
                                 />
                               </div>
                               <div className="flex flex-col w-full">
-                                <label>Video URL</label>
-                                <Field
-                                  name={`playlist.${index}.video_url`}
+                                <FIELD
                                   placeholder="Enter URL"
-                                  component={MyInput}
+                                  name="video_url"
+                                  label="Video URL"
+                                  index={index}
                                 />
                               </div>
                               <div className="flex flex-col w-full">
-                                <label>Time Duration</label>
-                                <Field
-                                  name={`playlist.${index}.time_duration`}
-                                  placeholder="Enter Duration(2:45)"
-                                  component={MyInput}
+                                <FIELD
+                                  placeholder="MM:SS"
+                                  name="time_duration"
+                                  label="Time Duration"
+                                  index={index}
                                 />
                               </div>
                               <div className="flex flex-col w-full">
-                                <label>Resources</label>
-                                <Field
-                                  name={`playlist.${index}.resources`}
+                                <FIELD
                                   placeholder="url1, url2, url3"
-                                  component={MyInput}
+                                  name="resources"
+                                  label="Resources"
+                                  index={index}
                                 />
                               </div>
                               <div className="flex flex-row space-x-2 select-none transition-all">
@@ -204,7 +213,61 @@ function FormCourses() {
 }
 
 const MyInput = ({ field, form, ...props }) => {
-  return <Input {...field} {...props} className="w-[100%]" />;
+  const error = getIn(form.errors, field.name);
+  const touch = getIn(form.touched, field.name);
+  return (
+    <Input
+      {...field}
+      {...props}
+      status={touch && error ? "error" : null}
+      className="w-[100%]"
+    />
+  );
+};
+
+const MyInput_Cleave = ({ field, index, setCreditCardNo, form, ...props }) => {
+  const error = getIn(form.errors, field.name);
+  const touch = getIn(form.touched, field.name);
+  function onTimeChange(e) {
+    setCreditCardNo(e.target.rawValue);
+  }
+
+  new Cleave(".form-field", {
+    time: true,
+    timePattern: ["h", "m"]
+  });
+
+  return (
+    <>
+      <Cleave
+        {...field}
+        {...props}
+        placeholder="MM:SS"
+        id={field.name}
+        options={{ time: true, timePattern: ["m", "s"] }}
+        onChange={onTimeChange}
+        className={`form-field ant-input w-[100%] ${
+          touch && error && " ant-input-status-error "
+        }`}
+      />
+    </>
+  );
+};
+
+const FIELD = ({ index, name, placeholder, label }) => {
+  return (
+    <>
+      <label>{label}</label>
+      <Field
+        name={`playlist.${index}.${name}`}
+        placeholder={placeholder}
+        component={MyInput}
+      />
+      <ErrorMessage name={`playlist.[${index}].${name}`}>
+        {(msg) => <div className="text-red-500">{msg}</div>}
+      </ErrorMessage>
+    </>
+  );
 };
 
 export default DashboardHOC(FormCourses);
