@@ -53,6 +53,23 @@ exports.newCourse = async (req, res) => {
   }
 };
 
+exports.singleCourse = async (req, res) => {
+  try {
+    const { id } = req.query;
+
+    const courses = await Courses.find({ _id: id });
+    if (!courses || courses.length === 0) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Course not found" });
+    }
+    return res.status(200).json(courses[0]);
+  } catch (e) {
+    console.log("CATCH => ", e);
+    return res.status(500).json({ success: false, message: e.message });
+  }
+};
+
 exports.allcourses = async (req, res) => {
   try {
     const courses = await Courses.find({});

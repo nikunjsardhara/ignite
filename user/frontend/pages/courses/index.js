@@ -1,18 +1,7 @@
 import React from "react";
-import Card from "../components/Card";
-import useSWR from "swr";
+import Card from "../../components/Card";
 
-// fetcher
-const fetcher = (url) => fetch(url).then((res) => res.json());
-
-function courses() {
-  const { data, error } = useSWR(
-    process.env.NEXT_PUBLIC_BACKEND_URL + "/courses",
-    fetcher
-  );
-  if (error) return <div>failed to load</div>;
-  if (!data) return <div>loading...</div>;
-
+function courses({ data }) {
   return (
     <div className="my-20 mt-10">
       <div className="container mx-auto">
@@ -36,3 +25,13 @@ function courses() {
 }
 
 export default courses;
+
+export async function getServerSideProps() {
+  const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "/courses");
+  const data = await res.json();
+  return {
+    props: {
+      data: data
+    }
+  };
+}

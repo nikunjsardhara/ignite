@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  toggle: false
+  toggle: false,
+  title_course: null
 };
 
 export const creatorSlice = createSlice({
@@ -10,11 +11,14 @@ export const creatorSlice = createSlice({
   reducers: {
     setToggle: (state, action) => {
       state.toggle = action.payload;
+    },
+    setTitleCourse: (state, action) => {
+      state.title_course = action.payload;
     }
   }
 });
 
 // Action creators are generated for each case reducer function
-export const { setToggle } = creatorSlice.actions;
+export const { setToggle, setTitleCourse } = creatorSlice.actions;
 
 export default creatorSlice.reducer;

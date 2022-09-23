@@ -15,10 +15,12 @@ function Content() {
         <div className="carousel-inner relative w-full overflow-hidden">
           <div className="carousel-item active relative float-left w-full">
             <Image
-              src="https://mdbcdn.b-cdn.net/img/new/slides/041.webp"
+              src="https://images.unsplash.com/photo-1613425269135-fb9f19ae7be8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80"
               layout="responsive"
               width={700}
-              blurDataURL={"https://mdbcdn.b-cdn.net/img/new/slides/041.webp"}
+              blurDataURL={
+                "https://images.unsplash.com/photo-1613425269135-fb9f19ae7be8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80"
+              }
               placeholder="blur"
               height={325}
               alt="Wild Landscape"
@@ -26,10 +28,12 @@ function Content() {
           </div>
           <div className="carousel-item relative float-left w-full">
             <Image
-              src="https://mdbcdn.b-cdn.net/img/new/slides/042.webp"
+              src="https://images.unsplash.com/photo-1589602667230-59a9bf8102a8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
               layout="responsive"
               width={700}
-              blurDataURL={"https://mdbcdn.b-cdn.net/img/new/slides/042.webp"}
+              blurDataURL={
+                "https://images.unsplash.com/photo-1589602667230-59a9bf8102a8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+              }
               placeholder="blur"
               height={325}
               alt="Wild Landscape"
@@ -37,12 +41,14 @@ function Content() {
           </div>
           <div className="carousel-item relative float-left w-full">
             <Image
-              src="https://mdbcdn.b-cdn.net/img/new/slides/043.webp"
+              src="https://images.unsplash.com/photo-1505765050516-f72dcac9c60e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
               layout="responsive"
               width={700}
               height={325}
               placeholder="blur"
-              blurDataURL={"https://mdbcdn.b-cdn.net/img/new/slides/043.webp"}
+              blurDataURL={
+                "https://images.unsplash.com/photo-1505765050516-f72dcac9c60e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
+              }
               alt="Wild Landscape"
             />
           </div>
