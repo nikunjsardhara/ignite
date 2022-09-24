@@ -87,7 +87,9 @@ exports.deleteCourses = async (req, res) => {
 
 exports.getCourses = async (req, res) => {
   try {
-    const courses = await Courses.find();
+    const { limit } = req.body;
+    let skip = Number(limit) - 10;
+    const courses = await Courses.find({}).limit(10).skip(skip);
     if (!courses) {
       return res
         .status(404)
@@ -119,15 +121,15 @@ exports.getCoursesById = async (req, res) => {
 exports.searchCourses = async (req, res) => {
   try {
     const { word } = req.body;
-    console.log(word);
-    if (!word)
-      return res
-        .status(404)
-        .json({ success: false, message: "Keyword not found" });
 
+    if (word.length === 0) {
+      return res
+        .status(200)
+        .json({ success: false, message: "No courses found" });
+    }
     const courses = await Courses.find({
       title: {
-        $regex: word
+        $regex: new RegExp(word, "i")
       }
     });
 

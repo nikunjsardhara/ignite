@@ -1,11 +1,7 @@
 import { Table, notification, Popconfirm } from "antd";
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import {
-  fetchCourses,
-  setSearchCourse
-} from "../../features/course/CourseSlice";
 import DashboardHOC from "../common/DashboardHOC";
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { useHistory } from "react-router-dom";
@@ -13,13 +9,19 @@ import mernDashApi from "../../helpers/apiUtils";
 import { BsCheckLg } from "react-icons/bs";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Input } from "antd";
+import Loading from "./Loading";
 const { Search } = Input;
 
 function TableCourses() {
   let history = useHistory();
   const dispatch = useDispatch();
   const [fakeState, setFakeState] = React.useState(0);
-  let courses = useSelector((state) => state.course.courses);
+  // let courses = useSelector((state) => state.course.courses);
+  const [courses, setCourses] = React.useState([]);
+
+  // InfiniteScroll
+  const [item, setItem] = React.useState(10);
+  const [hasMore, setHasMore] = React.useState(true);
 
   // Notifications
   const openNotification = () => {
@@ -107,11 +109,45 @@ function TableCourses() {
   ];
 
   useEffect(() => {
-    dispatch(fetchCourses());
+    (async () => {
+      try {
+        setItem(item + 10);
+        const res = await mernDashApi.post("/api/courses/getcourseslimit", {
+          limit: item
+        });
+        if (res?.data?.courses.length === 0) return setHasMore(false);
+        setCourses((oldArray) => {
+          return [...oldArray, ...res.data.courses];
+        });
+      } catch (error) {
+        let errMsg = error?.response?.data?.message;
+        dispatch(setCourses([]));
+      }
+    })();
   }, [fakeState]);
 
   const onSearch = async (value) => {
-    dispatch(setSearchCourse(value));
+    (async () => {
+      try {
+        const res = await mernDashApi.post("/api/courses/searchcourses", {
+          word: value
+        });
+        console.log(res?.data?.courses.length);
+        if (res?.data?.courses.length < 10) {
+          setHasMore(false);
+        }
+        setCourses(res?.data?.courses);
+      } catch (error) {
+        let errMsg = error?.response?.data?.message;
+        setCourses([]);
+      }
+    })();
+  };
+
+  const fetchMoreData = () => {
+    setTimeout(() => {
+      setFakeState(Math.random() * 2e4);
+    }, 1500);
   };
 
   return (
@@ -130,14 +166,21 @@ function TableCourses() {
           <div className="btn btn-success">Add Course</div>
         </Link>
       </div>
-      <Table
-        className="clearfix"
-        columns={columns}
-        dataSource={courses}
-        style={{ clear: "both" }}
-        // rowKey={data}
-        pagination={false}
-      />
+      <InfiniteScroll
+        dataLength={item}
+        next={fetchMoreData}
+        hasMore={hasMore}
+        loader={<Loading />}
+      >
+        <Table
+          className="clearfix"
+          columns={columns}
+          dataSource={courses}
+          style={{ clear: "both" }}
+          // rowKey={data}
+          pagination={false}
+        />
+      </InfiniteScroll>
     </div>
   );
 }

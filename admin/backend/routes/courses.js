@@ -14,7 +14,7 @@ const {
 } = require("../controllers/coursesControllers");
 
 //Add New Coursesm
-router.get("/getcourses", getCourses);
+router.post("/getcourseslimit", getCourses);
 router.post("/add", ensureAuth, addCourses);
 router.post("/update", ensureAuth, updateCourses);
 router.post("/delete", ensureAuth, deleteCourses);

@@ -23,29 +23,3 @@ export const courseSlice = createSlice({
 export const { setAddCourses, setCourses } = courseSlice.actions;
 
 export default courseSlice.reducer;
-
-export function fetchCourses() {
-  return async (dispatch) => {
-    try {
-      const res = await mernDashApi.get("/api/courses/getcourses");
-      dispatch(setCourses(res?.data?.courses));
-    } catch (error) {
-      let errMsg = error?.response?.data?.message;
-      dispatch(setCourses([]));
-    }
-  };
-}
-
-export function setSearchCourse(value) {
-  return async (dispatch) => {
-    try {
-      const res = await mernDashApi.post("/api/courses/searchcourses", {
-        word: value
-      });
-      dispatch(setCourses(res?.data?.courses));
-    } catch (error) {
-      let errMsg = error?.response?.data?.message;
-      dispatch(setCourses([]));
-    }
-  };
-}
