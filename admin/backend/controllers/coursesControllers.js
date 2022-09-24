@@ -115,3 +115,30 @@ exports.getCoursesById = async (req, res) => {
     return res.status(500).json({ success: false, message: e.message });
   }
 };
+
+exports.searchCourses = async (req, res) => {
+  try {
+    const { word } = req.body;
+    console.log(word);
+    if (!word)
+      return res
+        .status(404)
+        .json({ success: false, message: "Keyword not found" });
+
+    const courses = await Courses.find({
+      title: {
+        $regex: word
+      }
+    });
+
+    if (!courses) {
+      return res
+        .status(404)
+        .json({ success: false, message: "No courses found" });
+    }
+    return res.status(200).json({ success: true, courses });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ success: false, message: e.message });
+  }
+};

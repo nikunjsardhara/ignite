@@ -35,3 +35,17 @@ export function fetchCourses() {
     }
   };
 }
+
+export function setSearchCourse(value) {
+  return async (dispatch) => {
+    try {
+      const res = await mernDashApi.post("/api/courses/searchcourses", {
+        word: value
+      });
+      dispatch(setCourses(res?.data?.courses));
+    } catch (error) {
+      let errMsg = error?.response?.data?.message;
+      dispatch(setCourses([]));
+    }
+  };
+}

@@ -9,7 +9,8 @@ const {
   updateCourses,
   deleteCourses,
   getCourses,
-  getCoursesById
+  getCoursesById,
+  searchCourses
 } = require("../controllers/coursesControllers");
 
 //Add New Coursesm
@@ -18,4 +19,5 @@ router.post("/add", ensureAuth, addCourses);
 router.post("/update", ensureAuth, updateCourses);
 router.post("/delete", ensureAuth, deleteCourses);
 router.post("/getcourse", ensureAuth, getCoursesById);
+router.post("/searchcourses", searchCourses);
 module.exports = router;

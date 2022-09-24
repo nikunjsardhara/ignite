@@ -6,7 +6,11 @@ module.exports = {
     "./node_modules/tw-elements/dist/js/**/*.js"
   ],
   theme: {
-    extend: {}
+    extend: {
+      transitionProperty: {
+        width: "width"
+      }
+    }
   },
   plugins: [require("daisyui"), require("tw-elements/dist/plugin")],
   daisyui: {

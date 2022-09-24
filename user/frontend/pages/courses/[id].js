@@ -5,10 +5,6 @@ import { RiVideoFill } from "react-icons/ri";
 import { BsFillCaretDownFill } from "react-icons/bs";
 import { VscChromeClose } from "react-icons/vsc";
 import { BsArrowLeftCircle } from "react-icons/bs";
-import { useRouter } from "next/router";
-import useSWR from "swr";
-import { useDispatch } from "react-redux";
-import { setTitleCourse } from "../../slice/creatorSlice";
 import Link from "next/link";
 import YouTube from "react-youtube";
 
@@ -74,7 +70,7 @@ function Video({ data }) {
           {!theaterMode && (
             <div
               className="bg-[wheat] hover:bg-[#ebc57e] cursor-pointer hover:shadow-orange-500 hover:shadow-md  w-10 h-10 absolute top-[10%] right-0 flex p-2 justify-center items-center 
-  rounded-l-lg  hover:w-[80px] transition-all"
+  rounded-l-lg  hover:w-[80px]  transition-width transition-slowest ease"
               onClick={() => setTheaterMode(!theaterMode)}
             >
               <BsArrowLeftCircle className="w-[30px] h-[30px]" />
@@ -82,7 +78,7 @@ function Video({ data }) {
           )}
         </div>
         {theaterMode && (
-          <div className="row-span-3 transition-all ease-in duration-300">
+          <div className="row-span-3  transition-width transition-slowest ease">
             <div className="flex flex-row justify-between items-center my-4 mr-4 px-4 py-4 bg-gray-300 rounded-md font-semibold">
               <p>Course Content</p>
               <p
@@ -115,7 +111,7 @@ function Video({ data }) {
                         className="px-4 pt-3 pb-2  transition-all text-sm text-gray-700 bg-[#eeeeee] rounded-md mt-2 hover:bg-[#dddddd] cursor-pointer"
                       > */}
                       <div
-                        className={`flex flex-row justify-between transition-all items-center font-medium text-black hover:text-gray-700 bg-[#eeeeee] rounded-md mt-2 hover:bg-[#dddddd] cursor-pointer  ${
+                        className={`flex flex-row justify-between  transition-width transition-slowest ease items-center font-medium text-black hover:text-gray-700 bg-[#eeeeee] rounded-md mt-2 hover:bg-[#dddddd] cursor-pointer  ${
                           startVideo === item?.video &&
                           "!bg-[wheat] hover:!bg-[#ffcd70]"
                         }`}
@@ -194,7 +190,7 @@ function Video({ data }) {
           </div>
         )}
         <div
-          className={`col-span-2 ml-4 rounded-md mb-4 pt-2 transition-all ${
+          className={`col-span-2 ml-4 rounded-md mb-4 pt-2  transition-width transition-slowest ease ${
             !theaterMode && "!col-span-3 mr-5"
           }`}
         >

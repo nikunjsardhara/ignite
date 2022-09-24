@@ -2,13 +2,18 @@ import { Table, notification, Popconfirm } from "antd";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { fetchCourses } from "../../features/course/CourseSlice";
+import {
+  fetchCourses,
+  setSearchCourse
+} from "../../features/course/CourseSlice";
 import DashboardHOC from "../common/DashboardHOC";
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { useHistory } from "react-router-dom";
 import mernDashApi from "../../helpers/apiUtils";
 import { BsCheckLg } from "react-icons/bs";
-import InfiniteScroll from 'react-infinite-scroll-component';
+import InfiniteScroll from "react-infinite-scroll-component";
+import { Input } from "antd";
+const { Search } = Input;
 
 function TableCourses() {
   let history = useHistory();
@@ -105,21 +110,34 @@ function TableCourses() {
     dispatch(fetchCourses());
   }, [fakeState]);
 
+  const onSearch = async (value) => {
+    dispatch(setSearchCourse(value));
+  };
+
   return (
     <div>
-      <div className="w-full flex justify-end my-3">
+      <div className="w-full flex justify-between my-3">
+        <div>
+          <Search
+            placeholder="input search text"
+            onSearch={onSearch}
+            style={{
+              width: 300
+            }}
+          />
+        </div>
         <Link to="/admin/addcourse">
           <div className="btn btn-success">Add Course</div>
         </Link>
       </div>
-        <Table
-          className="clearfix"
-          columns={columns}
-          dataSource={courses}
-          style={{ clear: "both" }}
-          // rowKey={data}
-          pagination={false}
-        />
+      <Table
+        className="clearfix"
+        columns={columns}
+        dataSource={courses}
+        style={{ clear: "both" }}
+        // rowKey={data}
+        pagination={false}
+      />
     </div>
   );
 }
