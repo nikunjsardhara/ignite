@@ -2,6 +2,9 @@ import "../styles/globals.css";
 import { Provider } from "react-redux";
 import { store } from "../store";
 import Layout from "../components/Layout";
+import React from "react";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
 
 function MyApp({ Component, pageProps }) {
   if (Component.getLayout) {
@@ -12,6 +15,7 @@ function MyApp({ Component, pageProps }) {
       <Layout>
         <Component {...pageProps} />
       </Layout>
+      <ToastContainer theme="colored" />
     </Provider>
   );
 }

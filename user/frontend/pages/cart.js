@@ -4,6 +4,22 @@ import React, { useEffect, useMemo, useState } from "react";
 import { MdRemoveCircleOutline } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { setRemoveCart } from "../slice/creatorSlice";
+import { toast } from "react-toastify";
+import axios from "axios";
+
+function loadScript(src) {
+  return new Promise((resolve) => {
+    const script = document.createElement("script");
+    script.src = src;
+    script.onload = () => {
+      resolve(true);
+    };
+    script.onerror = () => {
+      resolve(false);
+    };
+    document.body.appendChild(script);
+  });
+}
 
 function cart() {
   const dispatch = useDispatch();
@@ -26,8 +42,69 @@ function cart() {
     return sum;
   }
 
-  function checkOut() {
-    console.log(total);
+  async function displayRazorpay() {
+    if (total === 0) return;
+
+    const res = await loadScript(
+      "https://checkout.razorpay.com/v1/checkout.js"
+    );
+    if (!res) {
+      toast.error("Razorpay SDK failed to load. Are you online?");
+      return;
+    }
+    // creating a new order
+    const result = await axios.post("http://localhost:4000/courses/orders", {
+      amount: total
+    });
+
+    if (!result) {
+      toast.error("Server error. Are you online?");
+      return;
+    }
+
+    // Getting the order details back
+    const { amount, id: order_id, currency } = result.data;
+
+    /** @link Razorpay => POST: /courses/orders */
+
+    const options = {
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY, // Enter the Key ID generated from the Dashboard
+      amount: amount.toString(),
+      currency: "INR",
+      name: "Ignite Corp.",
+      description: "Test Transaction",
+      image: "https://i.imgur.com/3g7nmJC.png",
+      order_id: order_id,
+      handler: async function (response) {
+        const data = {
+          orderCreationId: order_id,
+          razorpayPaymentId: response.razorpay_payment_id,
+          razorpayOrderId: response.razorpay_order_id,
+          razorpaySignature: response.razorpay_signature
+        };
+
+        const result = await axios.post(
+          "http://localhost:4000/courses/orders-success",
+          data
+        );
+
+        alert(result.data.msg);
+      },
+      // prefill: {
+      //   name: "John Doe",
+      //   email: "Johndoe@example.com",
+      //   contact: "9999999999"
+      // },
+      notes: {
+        address: "Palladium Mall, Surat"
+      },
+      theme: {
+        color: "#f5deb3"
+      }
+    };
+
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
   }
 
   return (
@@ -201,7 +278,7 @@ function cart() {
                 </div>
                 {/* <Link href="#"> */}
                 <button
-                  onClick={checkOut}
+                  onClick={displayRazorpay}
                   className="flex items-center justify-center w-full px-10 py-3 mt-6 font-medium text-black uppercase bg-[wheat] rounded-full shadow item-center hover:bg-[#ebc57e] focus:shadow-outline focus:outline-none"
                 >
                   <svg
