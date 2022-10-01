@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   toggle: false,
-  title_course: null
+  title_course: null,
+  cart: []
 };
 
 export const creatorSlice = createSlice({
@@ -14,11 +15,25 @@ export const creatorSlice = createSlice({
     },
     setTitleCourse: (state, action) => {
       state.title_course = action.payload;
+    },
+    setCart: (state, action) => {
+      let found = state.cart.some(
+        (cart_p) => cart_p._id === action.payload._id
+      );
+      if (!found) {
+        state.cart.push({ ...action.payload });
+      }
+    },
+    setRemoveCart: (state, action) => {
+      const cart = state.cart.filter((cart_p) => cart_p._id !== action.payload);
+      console.log(cart);
+      state.cart = cart;
     }
   }
 });
 
 // Action creators are generated for each case reducer function
-export const { setToggle, setTitleCourse } = creatorSlice.actions;
+export const { setToggle, setTitleCourse, setCart, setRemoveCart } =
+  creatorSlice.actions;
 
 export default creatorSlice.reducer;

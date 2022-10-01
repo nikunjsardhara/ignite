@@ -5,10 +5,12 @@ import { Fragment } from "react";
 import Link from "next/link";
 import Modal from "./Modal";
 import { Menu, Transition } from "@headlessui/react";
+import { useSelector } from "react-redux";
 
 function Navbar() {
   const [token, setToken] = useState(false);
-
+  const cartTotal = useSelector((state) => state.creator.cart.length);
+  
   useEffect(() => {
     if (typeof window !== "undefined") {
       const item = localStorage.getItem("IGNITE");
@@ -77,7 +79,14 @@ function Navbar() {
               <li className="text-black flex justify-center items-center">
                 <a>
                   <Link href="/cart">
-                    <AiOutlineShoppingCart className="w-[20px] h-[20px]" />
+                    <div className="relative">
+                      <AiOutlineShoppingCart className="w-[20px] h-[20px]" />
+                      {cartTotal > 0 && (
+                        <div className="absolute bg-[wheat] font-semibold text-xs p-1 rounded-full -top-4 -right-3">
+                          {cartTotal}
+                        </div>
+                      )}
+                    </div>
                   </Link>
                 </a>
               </li>

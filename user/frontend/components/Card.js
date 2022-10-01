@@ -1,8 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-
+import { useDispatch } from "react-redux";
+import { setCart } from "../slice/creatorSlice";
 function Card({ course }) {
+  const dispatch = useDispatch();
   return (
     <>
       <div className="card w-80 glass my-5 flex flex-col flex-wrap">
@@ -22,11 +24,14 @@ function Card({ course }) {
             {course.description}
           </p>
           <div className="absolute bottom-[15px] right-[40px]">
-            <Link href={`/courses/${course._id}`}>
-              <button className="btn bg-[wheat] border-none text-black hover:bg-[#ebc57e]">
-                Learn now!
+            {/* <Link href={`/courses/${course._id}`}> */}
+              <button
+                className="btn bg-[wheat] border-none text-black hover:bg-[#ebc57e]"
+                onClick={() => dispatch(setCart(course))}
+              >
+                Add to cart
               </button>
-            </Link>
+            {/* </Link> */}
           </div>
         </div>
       </div>
