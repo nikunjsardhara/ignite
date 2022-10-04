@@ -3,7 +3,7 @@ import Link from "next/link";
 import React, { useEffect, useMemo, useState } from "react";
 import { MdRemoveCircleOutline } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { setRemoveCart } from "../slice/creatorSlice";
+import { setRemoveCart, setClearCart } from "../slice/creatorSlice";
 import { toast } from "react-toastify";
 import axios from "axios";
 
@@ -54,7 +54,7 @@ function cart() {
     }
     // creating a new order
     const result = await axios.post("http://localhost:4000/courses/orders", {
-      amount: total
+      amount: total,
     });
 
     if (!result) {
@@ -66,6 +66,7 @@ function cart() {
     const { amount, id: order_id, currency } = result.data;
 
     /** @link Razorpay => POST: /courses/orders */
+    const token = localStorage.getItem("IGNITE");
 
     const options = {
       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY, // Enter the Key ID generated from the Dashboard
@@ -80,15 +81,19 @@ function cart() {
           orderCreationId: order_id,
           razorpayPaymentId: response.razorpay_payment_id,
           razorpayOrderId: response.razorpay_order_id,
-          razorpaySignature: response.razorpay_signature
+          razorpaySignature: response.razorpay_signature,
+          carts: carts,
+          token: token,
         };
 
         const result = await axios.post(
           "http://localhost:4000/courses/orders-success",
           data
         );
-
-        alert(result.data.msg);
+        if (result.data.msg === "success") {
+          toast.success("Payment Successful");
+          dispatch(setClearCart());
+        }
       },
       // prefill: {
       //   name: "John Doe",
@@ -96,11 +101,11 @@ function cart() {
       //   contact: "9999999999"
       // },
       notes: {
-        address: "Palladium Mall, Surat"
+        address: "Palladium Mall, Surat",
       },
       theme: {
-        color: "#f5deb3"
-      }
+        color: "#f5deb3",
+      },
     };
 
     const paymentObject = new window.Razorpay(options);
@@ -294,7 +299,7 @@ function cart() {
                       d="M527.9 32H48.1C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48.1 48h479.8c26.6 0 48.1-21.5 48.1-48V80c0-26.5-21.5-48-48.1-48zM54.1 80h467.8c3.3 0 6 2.7 6 6v42H48.1V86c0-3.3 2.7-6 6-6zm467.8 352H54.1c-3.3 0-6-2.7-6-6V256h479.8v170c0 3.3-2.7 6-6 6zM192 332v40c0 6.6-5.4 12-12 12h-72c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h72c6.6 0 12 5.4 12 12zm192 0v40c0 6.6-5.4 12-12 12H236c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h136c6.6 0 12 5.4 12 12z"
                     />
                   </svg>
-                  <span className="ml-2 mt-5px">Procceed to checkout</span>
+                  <span className="ml-2 mt-5px">Procceed to payment</span>
                 </button>
                 {/* </Link> */}
               </div>

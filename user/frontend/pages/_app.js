@@ -15,7 +15,7 @@ function MyApp({ Component, pageProps }) {
       <Layout>
         <Component {...pageProps} />
       </Layout>
-      <ToastContainer theme="colored" />
+      <ToastContainer theme="colored" limit={2} />
     </Provider>
   );
 }

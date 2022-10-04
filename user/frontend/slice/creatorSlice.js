@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   toggle: false,
   title_course: null,
-  cart: []
+  cart: [],
 };
 
 export const creatorSlice = createSlice({
@@ -28,12 +28,15 @@ export const creatorSlice = createSlice({
       const cart = state.cart.filter((cart_p) => cart_p._id !== action.payload);
       console.log(cart);
       state.cart = cart;
-    }
-  }
+    },
+    setClearCart: (state) => {
+      state.cart = [];
+    },
+  },
 });
 
 // Action creators are generated for each case reducer function
-export const { setToggle, setTitleCourse, setCart, setRemoveCart } =
+export const { setToggle, setTitleCourse, setCart, setRemoveCart,setClearCart } =
   creatorSlice.actions;
 
 export default creatorSlice.reducer;

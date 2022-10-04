@@ -28,7 +28,7 @@ function TableCourses() {
     notification.open({
       message: "Course Deleted Successfully",
       description: "",
-      icon: <BsCheckLg style={{ color: "#38b000" }} />
+      icon: <BsCheckLg style={{ color: "#38b000" }} />,
     });
   };
   const record_id = (id) => {
@@ -50,7 +50,7 @@ function TableCourses() {
         return <span>{record?.title}</span>;
       },
       sorter: (a, b) => a.title.length - b.title.length,
-      sortDirections: ["descend"]
+      sortDirections: ["descend"],
     },
     {
       title: "Description",
@@ -59,7 +59,7 @@ function TableCourses() {
         return <span>{record?.description}</span>;
       },
       sorter: (a, b) => a.description.length - b.description.length,
-      sortDirections: ["descend"]
+      sortDirections: ["descend"],
     },
     {
       title: "Price",
@@ -68,7 +68,7 @@ function TableCourses() {
         return <span>{record?.price}</span>;
       },
       sorter: (a, b) => a.price - b.price,
-      sortDirections: ["descend"]
+      sortDirections: ["descend"],
     },
     {
       title: "Edit",
@@ -83,7 +83,7 @@ function TableCourses() {
           </span>
         );
       },
-      sortDirections: ["descend"]
+      sortDirections: ["descend"],
     },
     {
       title: "Delete",
@@ -104,8 +104,8 @@ function TableCourses() {
           </span>
         );
       },
-      sortDirections: ["descend"]
-    }
+      sortDirections: ["descend"],
+    },
   ];
 
   useEffect(() => {
@@ -113,7 +113,7 @@ function TableCourses() {
       try {
         setItem(item + 10);
         const res = await mernDashApi.post("/api/courses/getcourseslimit", {
-          limit: item
+          limit: item,
         });
         if (res?.data?.courses.length === 0) return setHasMore(false);
         setCourses((oldArray) => {
@@ -130,7 +130,7 @@ function TableCourses() {
     (async () => {
       try {
         const res = await mernDashApi.post("/api/courses/searchcourses", {
-          word: value
+          word: value,
         });
         console.log(res?.data?.courses.length);
         if (res?.data?.courses.length < 10) {
@@ -158,7 +158,7 @@ function TableCourses() {
             placeholder="input search text"
             onSearch={onSearch}
             style={{
-              width: 300
+              width: 300,
             }}
           />
         </div>

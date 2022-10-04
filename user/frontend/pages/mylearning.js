@@ -13,7 +13,7 @@ function MyLearning() {
           .post(
             process.env.NEXT_PUBLIC_BACKEND_URL + "/courses/purchase-course",
             {
-              _id: decoded?._doc?._id
+              _id: decoded?._doc?._id,
             }
           )
           .then((res) => {
@@ -22,7 +22,7 @@ function MyLearning() {
               for (let j = 0; j < res.data.course[i].courses.length; j++) {
                 setCourses((prevArray) => [
                   ...prevArray,
-                  res?.data?.course[i]?.courses[j]
+                  res?.data?.course[i]?.courses[j],
                 ]);
               }
             }

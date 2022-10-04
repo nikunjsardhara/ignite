@@ -6,13 +6,17 @@ const UserCourses = new mongoose.Schema(
     course_id: {
       type: mongoose.Types.ObjectId,
       required: [true, "Course id is not empty!"],
-      ref: "Courses"
+      ref: "Courses",
     },
     user_id: {
       type: mongoose.Types.ObjectId,
       required: [true, "User id is not empty!"],
-      ref: "Users"
-    }
+      ref: "Users",
+    },
+    orderCreationId: {
+      type: String,
+      required: [true, "Order id is not empty!"],
+    },
   },
   { timestamps: true }
 );

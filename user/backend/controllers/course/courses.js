@@ -4,6 +4,8 @@ const Users = require("../../models/users");
 const UserCourses = require("../../models/userCourses");
 const crypto = require("crypto");
 const Razorpay = require("razorpay");
+const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 
 exports.newCourse = async (req, res) => {
   try {
@@ -29,21 +31,21 @@ exports.newCourse = async (req, res) => {
           video: "https://www.youtube.com/embed/7nafaH9SddU",
           resources: [
             "https://www.clickdimensions.com/links/TestPDFfile.pdf",
-            "https://www.clickdimensions.com/links/TestPDFfile.pdf"
+            "https://www.clickdimensions.com/links/TestPDFfile.pdf",
           ],
           time_duration: "1:00",
-          description: "Introduction to NodeJS"
+          description: "Introduction to NodeJS",
         },
         {
           title: "Introduction-2",
           video: "https://www.youtube.com/embed/7nafaH9SddU",
           resources: [],
           time_duration: "1:30",
-          description: "Introduction to NodeJS"
-        }
+          description: "Introduction to NodeJS",
+        },
       ],
       authors: "John Doe",
-      languages: "English"
+      languages: "English",
     };
 
     const newCourse = new Courses(staticCourse);
@@ -74,8 +76,21 @@ exports.singleCourse = async (req, res) => {
 
 exports.allcourses = async (req, res) => {
   try {
-    const courses = await Courses.find({});
-    return res.status(200).json({ success: true, courses });
+    const limit = parseInt(req.query?.limit);
+
+    if (limit === 3) {
+      const courses = await Courses.find({}).limit(3);
+      return res.status(200).json({ success: true, courses });
+    }
+
+    if (!limit) {
+      const courses = await Courses.find({});
+      return res.status(200).json({ success: true, courses });
+    } else {
+      let skip = parseInt(limit) - 12;
+      const courses = await Courses.find({}).limit(12).skip(skip);
+      return res.status(200).json({ success: true, courses });
+    }
   } catch (e) {
     console.log("CATCH => ", e);
     return res.status(500).json({ success: false, message: e.message });
@@ -90,9 +105,9 @@ exports.purchaseCourse = async (req, res) => {
           from: "courses",
           localField: "course_id",
           foreignField: "_id",
-          as: "courses"
-        }
-      }
+          as: "courses",
+        },
+      },
     ]);
 
     return res.status(200).json({ success: true, course });
@@ -112,13 +127,13 @@ exports.orders = async (req, res) => {
 
     const instance = new Razorpay({
       key_id: process.env.RAZORPAY_KEY_ID,
-      key_secret: process.env.RAZORPAY_SECRET
+      key_secret: process.env.RAZORPAY_SECRET,
     });
 
     const options = {
       amount: amount * 100,
       currency: "INR",
-      receipt: parseInt(Math.random() * 2e6).toString()
+      receipt: parseInt(Math.random() * 2e6).toString(),
     };
 
     const order = await instance.orders.create(options);
@@ -138,10 +153,12 @@ exports.success = async (req, res) => {
       orderCreationId,
       razorpayPaymentId,
       razorpayOrderId,
-      razorpaySignature
+      razorpaySignature,
+      carts,
+      token,
     } = req.body;
 
-    const shasum = crypto.createHmac("sha256", "w2lBtgmeuDUfnJVp43UpcaiT");
+    const shasum = crypto.createHmac("sha256", process.env.RAZORPAY_SECRET);
 
     shasum.update(`${orderCreationId}|${razorpayPaymentId}`);
 
@@ -150,12 +167,34 @@ exports.success = async (req, res) => {
     if (digest !== razorpaySignature)
       return res.status(400).json({ msg: "Transaction not legit!" });
 
+    const decoded = jwt.decode(token);
+    const user_id = decoded._doc._id;
+
+    // saving the order in our database
+
+    console.log(carts);
+
+    for (let i = 0; i < carts.length; i++) {
+      console.log({
+        orderCreationId,
+        course_id: carts[i]._id,
+        user_id,
+      });
+      let course = await UserCourses.create({
+        orderCreationId: orderCreationId.toString(),
+        course_id: mongoose.Types.ObjectId(carts[i]._id),
+        user_id: mongoose.Types.ObjectId(user_id),
+      });
+      console.log(course);
+    }
+
     res.json({
       msg: "success",
       orderId: razorpayOrderId,
-      paymentId: razorpayPaymentId
+      paymentId: razorpayPaymentId,
     });
   } catch (error) {
-    res.status(500).send(error);
+    console.log("ERROR", error.message);
+    res.status(500).send(error.message);
   }
 };

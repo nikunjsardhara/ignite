@@ -1,10 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 import { setCart } from "../slice/creatorSlice";
-function Card({ course }) {
-  const dispatch = useDispatch();
+function Card({ course, purchaseCourse }) {
+  const router = useRouter();
+
   return (
     <>
       <div className="card w-80 glass my-5 flex flex-col flex-wrap">
@@ -24,14 +27,11 @@ function Card({ course }) {
             {course.description}
           </p>
           <div className="absolute bottom-[15px] right-[40px]">
-            {/* <Link href={`/courses/${course._id}`}> */}
-              <button
-                className="btn bg-[wheat] border-none text-black hover:bg-[#ebc57e]"
-                onClick={() => dispatch(setCart(course))}
-              >
-                Add to cart
-              </button>
-            {/* </Link> */}
+            {router.pathname === "/courses" ? (
+              <CourseCart purchaseCourse={purchaseCourse} course={course} />
+            ) : (
+              <ReadingCart course={course} />
+            )}
           </div>
         </div>
       </div>
@@ -40,3 +40,51 @@ function Card({ course }) {
 }
 
 export default Card;
+
+function CourseCart({ purchaseCourse, course }) {
+  const dispatch = useDispatch();
+  return (
+    <>
+      {" "}
+      {purchaseCourse?.find((x) => x._id === course._id) ? (
+        <Link href={`/courses/${course._id}`}>
+          <button className="btn bg-[wheat] border-none text-black hover:bg-[#ebc57e]">
+            Watch Now
+          </button>
+        </Link>
+      ) : (
+        <button
+          className="btn bg-[wheat] border-none text-black hover:bg-[#ebc57e]"
+          onClick={() => {
+            dispatch(setCart(course));
+            toast.success(<Msg />);
+          }}
+        >
+          Add to cart
+        </button>
+      )}
+    </>
+  );
+}
+
+const Msg = ({ closeToast, toastProps }) => (
+  <div className="rounded">
+    Item added to cart
+    <br />
+    <div className="bg-green-700 rounded-full text-white text-sm font-semibold px-2 w-fit uppercase">
+      <Link href="/cart"> Go To Cart</Link>
+    </div>
+  </div>
+);
+
+function ReadingCart({ course }) {
+  return (
+    <>
+      <Link href={`/courses/${course._id}`}>
+        <button className="btn bg-[wheat] border-none text-black hover:bg-[#ebc57e]">
+          Watch Now
+        </button>
+      </Link>
+    </>
+  );
+}

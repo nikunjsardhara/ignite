@@ -1,10 +1,11 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import { MdOutlineArrowForwardIos } from "react-icons/md";
 import Card from "./Card";
 import Footer from "./Footer";
 
-function Content() {
+function Content({ data }) {
   return (
     <div className="">
       <div
@@ -99,15 +100,17 @@ function Content() {
         <div className="mx-10">
           <div className="mt-10 flex flex-row flex-wrap space-x-5 justify-evenly">
             {/* Cards codes are stopped here because props {course} array is not available yet. */}
-            {/* {[0, 1, 2].map((item, key) => {
-              return <Card key={key} />;
-            })} */}
+            {data?.courses?.map((item, key) => {
+              return <Card key={key} course={item} />;
+            })}
           </div>
         </div>
         <div className="w-full flex flex-row-reverse mt-5 mb-10">
-          <div className="flex items-center text-[#291334] hover:bg-[wheat] hover:text-[#000000] px-3 py-1 rounded-full mr-10 cursor-pointer">
-            SEE ALL COURSES <MdOutlineArrowForwardIos className="ml-4" />
-          </div>
+          <Link href={`/courses`}>
+            <div className="flex items-center text-[#291334] hover:bg-[wheat] hover:text-[#000000] px-3 py-1 rounded-full mr-10 cursor-pointer">
+              SEE ALL COURSES <MdOutlineArrowForwardIos className="ml-4" />
+            </div>
+          </Link>
         </div>
       </div>
       <div className="w-full bg-gray-100  text-gray-600">

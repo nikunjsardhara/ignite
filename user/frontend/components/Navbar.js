@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 function Navbar() {
   const [token, setToken] = useState(false);
   const cartTotal = useSelector((state) => state.creator.cart.length);
-  
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const item = localStorage.getItem("IGNITE");
@@ -24,7 +24,7 @@ function Navbar() {
     { href: "/account-settings", label: "Account settings" },
     { href: "/support", label: "Support" },
     { href: "/license", label: "License" },
-    { href: "/sign-out", label: "Sign out" }
+    { href: "/sign-out", label: "Sign out" },
   ];
   return (
     <div className="z-[0]">
@@ -76,20 +76,20 @@ function Navbar() {
                   </li>
                 </ul>
               </li>
-              <li className="text-black flex justify-center items-center">
-                <a>
-                  <Link href="/cart">
+              <Link href="/cart">
+                <li className="text-black flex justify-center items-center">
+                  <a>
                     <div className="relative">
                       <AiOutlineShoppingCart className="w-[20px] h-[20px]" />
                       {cartTotal > 0 && (
-                        <div className="absolute bg-[wheat] font-semibold text-xs p-1 rounded-full -top-4 -right-3">
+                        <div className="absolute bg-[wheat] font-semibold text-xs p-1 px-2 rounded-full -top-4 -right-4">
                           {cartTotal}
                         </div>
                       )}
                     </div>
-                  </Link>
-                </a>
-              </li>
+                  </a>
+                </li>
+              </Link>
             </ul>
           </div>
           {token ? (
